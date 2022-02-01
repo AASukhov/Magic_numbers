@@ -1,8 +1,11 @@
-import jdk.swing.interop.SwingInterOpUtils;
+import interfaces.Buyer;
+import interfaces.RatingChanger;
+import interfaces.ShopList;
+import interfaces.WishList;
 
 import java.util.*;
 
-public class Shop {
+public class Shop implements ShopList, WishList, RatingChanger, Buyer {                                   //Interface segregation principle
     protected List<Good> shopList;
     protected Map<Good, Integer> wishList;
 
@@ -11,14 +14,14 @@ public class Shop {
         wishList = new HashMap<Good, Integer>();
     }
 
-    public String shopListPrint() {
+    public String shopListPrint() { //DRY
         if (shopList.size() == 0) {
             return "В магазине нет товаров";
         } else {
-            System.out.println("Продукты в магазине:");
+            System.out.println("Товары в магазине:");
             System.out.println(String.format("%1$-12s %2$-8s %3$-5s", "Название", "Цена", "Рейтинг"));
             StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < shopList.size(); i++) {
+            for (int i = 0; i < shopList.size(); i++) {                                                 //Magic numbers
                 builder.append(shopList.get(i).goodToString());
                 if (i != shopList.size() - 1) {
                     builder.append("\n");
@@ -61,7 +64,7 @@ public class Shop {
 
     public boolean shopListCheck(String s) {
         boolean existance = false;
-        for (int i = 0; i < shopList.size(); i++) {
+        for (int i = 0; i < shopList.size(); i++) {                                                     //Magic numbers
             if (s.equals(shopList.get(i).name)) {
                 existance = true;
                 break;
@@ -72,7 +75,7 @@ public class Shop {
 
     public Good shopListGet(String s) {
         Good good = null;
-        for (int i = 0; i < shopList.size(); i++) {
+        for (int i = 0; i < shopList.size(); i++) {                                                     //Magic numbers
             if (s.equals(shopList.get(i).name)) {
                 good = shopList.get(i);
                 break;
@@ -82,7 +85,6 @@ public class Shop {
     }
 
     public String printWishList() {
-
         double total = 0;
         String k;
         StringBuilder builder = new StringBuilder("Ваши товары:\n");
@@ -112,8 +114,8 @@ public class Shop {
                 System.out.println("Что вы думаете о продукте '" + name + "'? Введите число от 1 до 5");
                 try {
                     while (true) {
-                    String answer2 = sc.nextLine();
-                    double k = Double.parseDouble(answer2);
+                        String answer2 = sc.nextLine();
+                        double k = Double.parseDouble(answer2);
                         if (k < 1 || k > 5) {
                             System.out.println("Введите число от 1 до 5");
                         } else {
